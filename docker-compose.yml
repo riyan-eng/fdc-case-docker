@@ -1,21 +1,22 @@
 services:
   backend:
-    build: ../case3
+    build: ./backend
     image: fdc-case7-backend
     container_name: fdc-case7-backend
     restart: unless-stopped
     ports:
       - 4001:3000
     volumes:
-      - ../case3/env-docker.json:/app/env.json
-      - ../case3/casbin.conf:/app/casbin.conf
-      - ../case3/locale:/app/locale
-      - ../case3/logs:/app/logs
+      - ./backend/env-docker.json:/app/env.json
+      - ./backend/casbin.conf:/app/casbin.conf
+      - ./backend/locale:/app/locale
+      - ./backend/logs:/app/logs
+      - ./backend/docs/swagger.json:/app/docs/swagger.json
     networks:
       - fdc
   frontend:
     build: 
-      context: ../case1
+      context: ./frontend
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_PUBLIC_KEY: ${NEXT_PUBLIC_PUBLIC_KEY}
