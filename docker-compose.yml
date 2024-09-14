@@ -1,0 +1,39 @@
+services:
+  backend:
+    build: ../case3
+    image: fdc-case7-backend
+    container_name: fdc-case7-backend
+    restart: unless-stopped
+    ports:
+      - 4001:3000
+    volumes:
+      - ../case3/env-docker.json:/app/env.json
+      - ../case3/casbin.conf:/app/casbin.conf
+      - ../case3/locale:/app/locale
+      - ../case3/logs:/app/logs
+    networks:
+      - fdc
+  frontend:
+    build: 
+      context: ../case1
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_PUBLIC_KEY: ${NEXT_PUBLIC_PUBLIC_KEY}
+        NEXT_PUBLIC_URL_ENDPOINT: ${NEXT_PUBLIC_URL_ENDPOINT}
+        PRIVATE_KEY: ${PRIVATE_KEY}
+        NEXT_PUBLIC_HOST_PERSON: ${NEXT_PUBLIC_HOST_PERSON}
+        NEXT_PUBLIC_HOST_PRODUCT: ${NEXT_PUBLIC_HOST_PRODUCT}
+        NEXT_PUBLIC_HOST_EXAMPLE: ${NEXT_PUBLIC_HOST_EXAMPLE}
+    image: fdc-case7-frontend
+    container_name: fdc-case7-frontend
+    restart: unless-stopped
+    ports:
+      - 4000:3000
+    networks:
+      - fdc
+    depends_on:
+      - backend
+
+networks:
+  fdc:
+    driver: bridge
